@@ -26,21 +26,45 @@ type DropList struct {
 
 func getList() string {
 	var url = "https://api.dropboxapi.com/2/files/list_folder"
-	var result = post(url, accessToken)
+	var result = post(url, accessToken, "")
 
 	return result
 }
 
+func getUpload() string {
+	var url = "https://api.dropboxapi.com/2/files/list_folder"
+	var result = post(url, accessToken, "")
+
+	return result
+}
+
+func defaultCommand() string {
+	var data string
+	data = "\n DropGoBox"
+	return data
+}
+
 func main() {
-	source := flag.String("method", "list", "une list")
+	// Fonction utilisé lors de l'appelle via CMD
+	source := flag.String("method", "default", "")
 	flag.Parse()
 	fmt.Println(*source)
 
-	if *source == "list" {
-		getList()
+	var dropdata string
+	switch *source {
+	case "list":
+		dropdata = getList()
+	case "upload":
+		dropdata = getUpload()
+	case "download":
+		dropdata = getList()
+	default:
+		dropdata = defaultCommand()
 	}
 
-	// list
+	println(dropdata)
+
+	// ----> list <----
 	// upload
 	// download
 	// delete

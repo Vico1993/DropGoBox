@@ -49,12 +49,12 @@ func get(url string, accessToken string) string {
 	return bodyString
 }
 
-func post(urlString string, accessToken string, path string) string {
+func post(url string, accessToken string, dataString string) string {
 	fmt.Println("---- Récupération  ----")
 
-	data := []byte(`{ "path": "` + path + `", "recursive": false, "include_media_info": false, "include_deleted": false, "include_has_explicit_shared_members": false, "include_mounted_folders": true }`)
+	data := []byte(dataString)
 
-	req, err := http.NewRequest("POST", urlString, bytes.NewBuffer(data))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
 	if err != nil {
 		log.Fatal("NewRequest: ", err)
 	}

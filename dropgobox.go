@@ -24,15 +24,16 @@ type DropList struct {
 	HasMore  bool           `json:"has_more"`
 }
 
-func getList() string {
+func getList(path string) string {
 	var url = "https://api.dropboxapi.com/2/files/list_folder"
-	var result = post(url, accessToken, "")
+	var data = `{ "path": "` + path + `", "recursive": false, "include_media_info": false, "include_deleted": false, "include_has_explicit_shared_members": false, "include_mounted_folders": true }`
+	var result = post(url, accessToken, data)
 
 	return result
 }
 
 func getUpload() string {
-	var url = "https://api.dropboxapi.com/2/files/list_folder"
+	var url = "https://content.dropboxapi.com/2/files/upload"
 	var result = post(url, accessToken, "")
 
 	return result
@@ -53,11 +54,11 @@ func main() {
 	var dropdata string
 	switch *source {
 	case "list":
-		dropdata = getList()
+		dropdata = getList("")
 	case "upload":
 		dropdata = getUpload()
 	case "download":
-		dropdata = getList()
+		// dropdata = getList()
 	default:
 		dropdata = defaultCommand()
 	}

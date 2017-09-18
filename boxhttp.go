@@ -3,12 +3,15 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
 func get(url string, accessToken string) string {
+	fmt.Println("---- Récupération  ----")
+
 	// Build the request
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -47,6 +50,7 @@ func get(url string, accessToken string) string {
 }
 
 func post(urlString string, accessToken string) string {
+	fmt.Println("---- Récupération  ----")
 
 	data := []byte(`{ "path": "", "recursive": false, "include_media_info": false, "include_deleted": false, "include_has_explicit_shared_members": false, "include_mounted_folders": true }`)
 

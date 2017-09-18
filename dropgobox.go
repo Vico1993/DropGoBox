@@ -24,13 +24,11 @@ type DropList struct {
 	HasMore  bool           `json:"has_more"`
 }
 
-func getList() {
-	fmt.Println("---- Récupération  ----")
-
+func getList() string {
 	var url = "https://api.dropboxapi.com/2/files/list_folder"
 	var result = post(url, accessToken)
 
-	println(result)
+	return result
 }
 
 func main() {

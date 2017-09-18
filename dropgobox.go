@@ -3,19 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
-	"strings"
 )
 
 // Access Token Dropbox
 const accessToken = "QO8JziS-WMAAAAAAAAAFr8Lob1Xt0oAWqzrkT6kwjLdbAygnJGiYiuV0VINKmY4G"
 
 func getList() {
-	fmt.Println("---- Récupération  ----\n")
+	fmt.Println("---- Récupération  ----")
 
 	var url = "https://api.dropboxapi.com/2/files/list_folder"
 	var result = post(url, accessToken)
 
-	println(strings.NewReader(result))
+	println(result)
 }
 
 func main() {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -81,9 +82,11 @@ func post(urlString string, accessToken string) string {
 		log.Fatal("erreur ReadAll: ", err)
 	}
 
-	println(body)
-	bodyString := string(body)
-	println(bodyString)
+	var prettyJSON bytes.Buffer
+	error := json.Indent(&prettyJSON, body, "", "\t")
+	if error != nil {
+		log.Println("JSON parse error: ", error)
+	}
 
-	return bodyString
+	return string(prettyJSON.Bytes())
 }

@@ -8,6 +8,22 @@ import (
 // Access Token Dropbox
 const accessToken = "QO8JziS-WMAAAAAAAAAFr8Lob1Xt0oAWqzrkT6kwjLdbAygnJGiYiuV0VINKmY4G"
 
+// DropElements represents return elements from Dropbox
+type DropElements struct {
+	Tag         string `json:".tag"`
+	Name        string `json:"name"`
+	PathLower   string `json:"path_lower"`
+	PathDisplay string `json:"path_display"`
+	ID          string `json:"id"`
+}
+
+// DropList represents return from Dropbox when we use /list.
+type DropList struct {
+	Elements []DropElements `json:"entries"`
+	Cursor   string         `json:"cursor"`
+	HasMore  bool           `json:"has_more"`
+}
+
 func getList() {
 	fmt.Println("---- Récupération  ----")
 

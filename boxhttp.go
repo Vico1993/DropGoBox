@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -50,18 +51,27 @@ func get(url string, accessToken string) string {
 	return bodyString
 }
 
-func post(url string, accessToken string, dataString string, contentType string) string {
+func post(url string, accessToken string, dataString string, contentType string, header bool) string {
 	fmt.Println("---- POST REQUEST  ----")
 
-	data := []byte(dataString)
+	var tmp = dataString
+	if header {
+		tmp = ""
+	} else {
+		tmp = dataString
+	}
+	data := bytes.NewBuffer([]byte(tmp))
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+	req, err := http.NewRequest("POST", url, data)
 	if err != nil {
 		log.Fatal("NewRequest: ", err)
 	}
 
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 	req.Header.Add("Content-Type", contentType)
+	if header {
+		req.Header.Add("Dropbox-API-Arg", dataString)
+	}
 
 	// For control over HTTP client headers,
 	// redirect policy, and other settings,
@@ -82,6 +92,25 @@ func post(url string, accessToken string, dataString string, contentType string)
 	// Defer the closing of the body
 	defer resp.Body.Close()
 
+	// RECOIT UN FICHIER
+	var contentTypeResp = resp.Header.Get("Content-Type")
+	if contentTypeResp == "application/octet-stream" {
+
+		var newFile *os.File
+
+		if newFile, err = os.Create("./download/test.txt"); err != nil {
+			log.Fatal("error Create : ", err)
+		}
+		defer newFile.Close()
+
+		if _, err = io.Copy(newFile, resp.Body); err != nil {
+			// os.Remove(dst)
+		}
+
+		return "DEBUG"
+	}
+
+	// ELSE CAS CLASSIC
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal("erreur ReadAll: ", err)

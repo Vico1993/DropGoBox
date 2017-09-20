@@ -27,7 +27,7 @@ type DropList struct {
 func getList(path string) string {
 	var url = "https://api.dropboxapi.com/2/files/list_folder"
 	var data = `{ "path": "` + path + `", "recursive": false, "include_media_info": false, "include_deleted": false, "include_has_explicit_shared_members": false, "include_mounted_folders": true }`
-	var result = post(url, accessToken, data, "application/json")
+	var result = post(url, accessToken, data, "application/json", false)
 
 	return result
 }
@@ -36,6 +36,14 @@ func getUpload(filePath string, dropboxFilePath string) string {
 	var url = "https://content.dropboxapi.com/2/files/upload"
 	var data = `{"path": "` + dropboxFilePath + `","mode": "overwrite","autorename": true,"mute": false}`
 	var result = postFile(url, accessToken, data, filePath)
+
+	return result
+}
+
+func getDownload(dropboxFilePath string) string {
+	var url = "https://content.dropboxapi.com/2/files/download"
+	var data = `{ "path": "` + dropboxFilePath + `" }`
+	var result = post(url, accessToken, data, "text/plain", true)
 
 	return result
 }
@@ -60,7 +68,8 @@ func main() {
 	case "upload":
 		dropdata = getUpload("./README.md", "/Homework/test.txt")
 	case "download":
-		// dropdata = getList()
+		dropdata = getDownload("/convention victor.pdf")
+		// dropdata = getDownload("/Homework/data.txt")
 	default:
 		dropdata = defaultCommand()
 	}
